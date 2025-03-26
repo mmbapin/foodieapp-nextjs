@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "better-sqlite3": "^11.9.1",
     "foodies": "file:",
     "next": "14.0.3",
     "react": "^18",
