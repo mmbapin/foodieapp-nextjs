@@ -1,19 +1,31 @@
 import React from 'react';
-import classes from './page.module.css'
+import classes from './page.module.css';
 import Image from 'next/image';
 import { getMealDetails } from '@/lib/meals';
 import { notFound } from 'next/navigation';
 
-const MealDetailsPage = ({params}) => {
+export async function generateMetadata({ params }) {
+	const meal = await getMealDetails(params.mealSlug);
+	if (!meal) {
+		notFound();
+	}
+	return {
+		title: meal.title,
+		description: meal.summary,
+		ogImage: meal.image,
+	};
+}
+
+const MealDetailsPage = ({ params }) => {
 	const meal = getMealDetails(params.mealSlug);
-	if(!meal) {
+	if (!meal) {
 		notFound();
 	}
 	return (
 		<>
 			<header className={classes.header}>
 				<div className={classes.image}>
-					<Image src={meal.image} alt={meal.title} fill/>
+					<Image src={meal.image} alt={meal.title} fill />
 				</div>
 				<div className={classes.headerText}>
 					<h1>{meal.title}</h1>
@@ -24,16 +36,15 @@ const MealDetailsPage = ({params}) => {
 				</div>
 			</header>
 			<main>
-				<p className={classes.instructions}
+				<p
+					className={classes.instructions}
 					dangerouslySetInnerHTML={{
-						__html: meal.instructions.replace(/\n/g, '<br />')
+						__html: meal.instructions.replace(/\n/g, '<br />'),
 					}}
-				>
-
-				</p>
+				></p>
 			</main>
 		</>
-	)
+	);
 };
 
 export default MealDetailsPage;
